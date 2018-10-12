@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         URL url = null;
         try {
-            url = new URL("");
+            url = new URL("https://swapi.co/api/");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         try {
-            if (urlConnection.getResponseCode() == HttpURLConnection.HttpURLConnection.HTT_OK) {
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = null;
                 try {
                     in = new BufferedReader(
