@@ -25,15 +25,16 @@ import com.example.sweenu.sw_info.request.PlanetSync;
 import com.example.sweenu.sw_info.request.VaisseauSync;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "APP";
-
+    ListView mListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final ListView mListView = findViewById(R.id.listView);
         setContentView(R.layout.activity_main);
+        mListView = findViewById(R.id.listView);
 
         ArrayList<String> list_name = new ArrayList<String>();
 
@@ -44,17 +45,47 @@ public class MainActivity extends AppCompatActivity {
         Button vaisseauB = findViewById(R.id.Vaisseau);
         Button planetB = findViewById(R.id.Planet);
 
-        getEspeceList();
 
         persoB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getPersoList(mListView);
+                getPersoList();
+            }
+        });
+
+        filmB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFilmList();
+            }
+        });
+        especeB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getEspeceList();
+            }
+        });
+        vehiculeB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        vaisseauB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getVaisseauList();
+            }
+        });
+        planetB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPlanetlist();
             }
         });
     }
 
-    public void getPersoList(final ListView listview){
+    public void getPersoList(){
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
         PersoSync request = new PersoSync(queue);
 
@@ -68,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onSucess: " + list_name);
                 final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
                         android.R.layout.simple_list_item_1, list_name);
-                listview.setAdapter(adapter);
+                mListView.setAdapter(adapter);
             }
             @Override
             public void onError(String message) {
