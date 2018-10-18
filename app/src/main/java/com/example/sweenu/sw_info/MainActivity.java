@@ -1,15 +1,18 @@
 package com.example.sweenu.sw_info;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.example.sweenu.sw_info.adapter.PersoAdapter;
 import com.example.sweenu.sw_info.model.Espece;
 import com.example.sweenu.sw_info.model.Film;
 import com.example.sweenu.sw_info.model.Perso;
@@ -25,30 +28,48 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "APP";
-    private RecyclerView recycler;
-    private PersoAdapter pAdapter;
-    private ArrayList<Perso> persoArrayList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getPersoList();
+        final ListView mListView = findViewById(R.id.listView);
+        setContentView(R.layout.activity_main);
 
-        persoArrayList = new ArrayList<>();
+        ArrayList<String> list_name = new ArrayList<String>();
 
-        recycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        pAdapter = new PersoAdapter(getApplicationContext(), persoArrayList);
+        Button filmB = findViewById(R.id.Film);
+        Button especeB = findViewById(R.id.Espece);
+        Button persoB = findViewById(R.id.Personnage);
+        Button vehiculeB = findViewById(R.id.Vehicule);
+        Button vaisseauB = findViewById(R.id.Vaisseau);
+        Button planetB = findViewById(R.id.Planet);
+
+        getEspeceList();
+
+        persoB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPersoList(mListView);
+            }
+        });
     }
-    public void getPersoList(){
+
+    public void getPersoList(final ListView listview){
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
         PersoSync request = new PersoSync(queue);
 
         request.getPersoList(new PersoSync.PersonnageInterfaces() {
             @Override
             public void onSucess(ArrayList<Perso> persos) {
-                persoArrayList.addAll(persos);
-                pAdapter.notifyDataSetChanged();
+                ArrayList<String> list_name = new ArrayList<String>();
+                for (Perso perso : persos) {
+                    list_name.add(perso.getName());
+                }
+                Log.d(TAG, "onSucess: " + list_name);
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+                        android.R.layout.simple_list_item_1, list_name);
+                listview.setAdapter(adapter);
             }
-
             @Override
             public void onError(String message) {
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
@@ -64,7 +85,11 @@ public class MainActivity extends AppCompatActivity {
         request.getEspeceList(new EspeceSync.EspeceInterfaces() {
             @Override
             public void onSucess(ArrayList<Espece> especes) {
-                Log.d(TAG, "onSucessss: "+ especes);
+                ArrayList<String> list_name = new ArrayList<String>();
+                for (Espece espece : especes) {
+                    list_name.add(espece.getName());
+                }
+                Log.d(TAG, "nom espece : " + list_name);
             }
 
             @Override

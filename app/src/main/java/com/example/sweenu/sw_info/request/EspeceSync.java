@@ -27,7 +27,7 @@ public class EspeceSync {
         this.queue= queue;
     }
 
-
+    ArrayList<String> ListNameResult = new ArrayList<String>();
     public interface EspeceInterfaces{
         void onSucess(ArrayList<Espece> species);
         void onError(String message);
@@ -63,6 +63,8 @@ public class EspeceSync {
                             String language = EspeceObject.getString("language");
 
                             Espece espece = new Espece(name, classification, designation, average_height, skin_colors, hair_colors, eye_colors,language);
+
+                            ListNameResult.add(name);
 
                             species.add(espece);
                         } catch (JSONException e) {
